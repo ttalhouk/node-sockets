@@ -1,0 +1,26 @@
+{
+  "name": "node-sockets",
+  "version": "1.0.0",
+  "description": "Playground for building web sockets application in node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ttalhouk/node-sockets.git"
+  },
+  "engines":{
+    "node": "6.2.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ttalhouk/node-sockets/issues"
+  },
+  "homepage": "https://github.com/ttalhouk/node-sockets#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
