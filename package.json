@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/ttalhouk/node-sockets.git"
   },
-  "engines":{
+  "engines": {
     "node": "6.2.2"
   },
   "author": "",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ttalhouk/node-sockets#readme",
   "dependencies": {
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "socket.io": "^2.0.1"
   }
 }
