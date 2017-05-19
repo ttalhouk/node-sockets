@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
+const {generateMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT || 3000; // required for heroku deployment
@@ -15,25 +16,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 // User connections
-  socket.emit('newMessage', {
+  socket.emit('newMessage', generateMessage({
     from: 'Admin',
     text: 'Welcome to the chat app',
-    createdAt: new Date().getTime()
-  });
-  socket.broadcast.emit('newMessage', {
-      from: 'Admin',
-      text: 'New User has joined',
-      createdAt: new Date().getTime()
-    });
+  }));
+  socket.broadcast.emit('newMessage',generateMessage({
+    from:'admin',
+    text:'New user has joined'
+  }));
 
 // User messages
-  socket.on('createMessage', (newMsg) => {
+  socket.on('createMessage', (newMsg, callback) => {
     console.log('Create Message', newMsg);
-    io.emit('newMessage', {
-      from: newMsg.from,
-      text: newMsg.text,
-      createdAt: new Date().getTime()
-    });
+    io.emit('newMessage', generateMessage(newMsg));
+    callback('From the server!');
   });
 
   socket.on('disconnect', (socket) => {
@@ -42,5 +38,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(port, () =>{
-  console.log('Server running on port '+port);
+  console.log('Server running on port ' + port);
 });
