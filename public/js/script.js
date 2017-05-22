@@ -28,7 +28,8 @@ $(document).ready(function(){
   });
 
   socket.on('newMessage', function(msg) {
-    $log.append(`<li>${msg.from}: ${msg.text} <small>${msg.createdAt}</small> </li>`)
+    var formatedTime = moment(msg.createdAt).format('h:mm a');
+    $log.append(`<li>${msg.from} (${formatedTime}): ${msg.text}</li>`)
   });
 
   $locationBtn.on('click', function(e){
@@ -56,12 +57,14 @@ $(document).ready(function(){
       });
   });
   socket.on('newLocationMessage', function(msg) {
+    var formatedTime = moment(msg.createdAt).format('h:mm a');
     var li = $(`<li></li>`);
     var a = $(`<a target="_blank"></a>`);
-    li.text(`${msg.from}: `);
+    li.text(`${msg.from} (${formatedTime}): `);
     a.attr('href', msg.url);
-    a.text('Find Me!')
-    $log.append(li.append(a));
+    a.text('Find Me!');
+    li.append(a);
+    $log.append(li);
 
   });
 

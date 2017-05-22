@@ -27,6 +27,7 @@
   "homepage": "https://github.com/ttalhouk/node-sockets#readme",
   "dependencies": {
     "express": "^4.15.2",
+    "moment": "^2.18.1",
     "socket.io": "^2.0.1"
   }
 }
