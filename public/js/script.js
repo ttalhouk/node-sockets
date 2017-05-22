@@ -1,5 +1,24 @@
 var socket = io();
 
+function scrollToBottom(){
+  // selectors
+  var $messages = $('#msg-history')
+  var $newMessage = $messages.children('li:last-child')
+
+  // heights
+  var clientHeight = $messages.prop('clientHeight');
+  var scrollTop = $messages.prop('scrollTop');
+  var scrollHeight = $messages.prop('scrollHeight');
+  var newMessageHeight = $newMessage.innerHeight();
+  var prevMessageHeight = $newMessage.prev().innerHeight();
+  //console.log({clientHeight, scrollTop, scrollHeight, newMessageHeight, prevMessageHeight});
+  if (clientHeight + scrollTop + newMessageHeight + prevMessageHeight >= scrollHeight) {
+    //console.log('should scroll');
+    $messages.scrollTop(scrollHeight);
+  }
+}
+
+
 socket.on('connect', function() {
   console.log('Connected to server');
 });
@@ -22,7 +41,7 @@ $(document).ready(function(){
     var messageVal = $msgField.val();
     // console.log({messageVal, $msgField});
     socket.emit('createMessage', {from:'user', text: messageVal}, function (msg){
-      console.log(msg + ' Got it!');
+      //console.log(msg + ' Got it!');
       $msgField.val('');
     })
   });
@@ -36,7 +55,7 @@ $(document).ready(function(){
       timestamp: formatedTime
     })
     $log.append(html);
-
+    scrollToBottom();
     // var formatedTime = moment(msg.createdAt).format('h:mm a');
     // $log.append(`<li>${msg.from} (${formatedTime}): ${msg.text}</li>`)
 
@@ -75,7 +94,7 @@ $(document).ready(function(){
       timestamp: formatedTime
     })
     $log.append(html);
-
+    scrollToBottom();
     // var li = $(`<li></li>`);
     // var a = $(`<a target="_blank"></a>`);
     // li.text(`${msg.from} (${formatedTime}): `);
