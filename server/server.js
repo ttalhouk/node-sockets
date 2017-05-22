@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
-const {generateMessage} = require('./utils/message');
+const {generateMessage, generateLocationMessage} = require('./utils/message');
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT || 3000; // required for heroku deployment
@@ -35,7 +35,18 @@ io.on('connection', (socket) => {
   socket.on('disconnect', (socket) => {
     console.log('user disconnected');
   });
+
+// User position
+  socket.on('createLocationMsg', (position) => {
+    io.emit('newLocationMessage',generateLocationMessage({
+      from:'User',
+      lat: position.lat,
+      lng: position.lng
+    }))
+  })
+
 });
+
 
 server.listen(port, () =>{
   console.log('Server running on port ' + port);
