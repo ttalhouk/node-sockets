@@ -35,13 +35,25 @@ $(document).ready(function(){
     if (!navigator.geolocation) {
       return alert('Your geolocation is not supported by your browser')
     }
+    $locationBtn.text('Sending Location...');
+    $locationBtn.attr('disabled', 'disabled');
+
+    function locationBtnOn(){
+      $locationBtn.text('Send Location');
+      $locationBtn.removeAttr('disabled');
+    }
 
     navigator.geolocation.getCurrentPosition(function(position){
-      console.log(position);
-      socket.emit('createLocationMsg', {lat: position.coords.latitude, lng: position.coords.longitude});
-    }, function(error){
-      alert('Unable to fetch location.');
-    });
+      locationBtnOn();
+      // console.log(position);
+      socket.emit('createLocationMsg', {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      })
+      }, function(error){
+        alert('Unable to fetch location.');
+        locationBtnOn();
+      });
   });
   socket.on('newLocationMessage', function(msg) {
     var li = $(`<li></li>`);
@@ -50,6 +62,7 @@ $(document).ready(function(){
     a.attr('href', msg.url);
     a.text('Find Me!')
     $log.append(li.append(a));
+
   });
 
 
