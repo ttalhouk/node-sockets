@@ -3,6 +3,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const path = require('path');
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT || 3000; // required for heroku deployment
@@ -15,15 +16,27 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+  socket.on('join', (params, callback) => {
+    if (isRealString(params.name) && isRealString(params.room)){
+
+      socket.join(params.room)
+
+      socket.emit('newMessage', generateMessage({
+        from: 'Admin',
+        text: 'Welcome to the chat app',
+      }));
+      socket.broadcast.to(params.room).emit('newMessage',generateMessage({
+        from:'Admin',
+        text:`${params.name} has joined`
+      }));
+
+      return callback();
+    } else {
+      return callback('Name or Room is not valid');
+    }
+  });
 // User connections
-  socket.emit('newMessage', generateMessage({
-    from: 'Admin',
-    text: 'Welcome to the chat app',
-  }));
-  socket.broadcast.emit('newMessage',generateMessage({
-    from:'admin',
-    text:'New user has joined'
-  }));
+
 
 // User messages
   socket.on('createMessage', (newMsg, callback) => {
