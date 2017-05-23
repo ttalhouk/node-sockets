@@ -55,8 +55,8 @@ $(document).ready(function(){
   $form.on('submit', function(e){
     e.preventDefault();
     var messageVal = $msgField.val();
-
-    socket.emit('createMessage', {from:'user', text: messageVal}, function (msg){
+    let parameters = $.deparam(window.location.search);
+    socket.emit('createMessage', {from: parameters.name, text: messageVal}, function (msg){
       $msgField.val('');
     })
   });
