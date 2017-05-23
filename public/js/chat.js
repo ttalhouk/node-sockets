@@ -35,7 +35,14 @@ socket.on('disconnect', function() {
   console.log(('disconnected from server'));
 });
 
-
+socket.on('updateUserList', function(users) {
+  var $ol = $('<ol></ol>');
+  var $userList = $('#users');
+  users.forEach(function(user){
+    $ol.append($(`<li></li>`).text(user));
+  })
+  $userList.html($ol);
+});
 
 
 $(document).ready(function(){
@@ -48,9 +55,8 @@ $(document).ready(function(){
   $form.on('submit', function(e){
     e.preventDefault();
     var messageVal = $msgField.val();
-    // console.log({messageVal, $msgField});
+
     socket.emit('createMessage', {from:'user', text: messageVal}, function (msg){
-      //console.log(msg + ' Got it!');
       $msgField.val('');
     })
   });
@@ -65,9 +71,6 @@ $(document).ready(function(){
     })
     $log.append(html);
     scrollToBottom();
-    // var formatedTime = moment(msg.createdAt).format('h:mm a');
-    // $log.append(`<li>${msg.from} (${formatedTime}): ${msg.text}</li>`)
-
   });
 
   $locationBtn.on('click', function(e){
@@ -104,14 +107,6 @@ $(document).ready(function(){
     })
     $log.append(html);
     scrollToBottom();
-    // var li = $(`<li></li>`);
-    // var a = $(`<a target="_blank"></a>`);
-    // li.text(`${msg.from} (${formatedTime}): `);
-    // a.attr('href', msg.url);
-    // a.text('Find Me!');
-    // li.append(a);
-    // $log.append(li);
-
   });
 
 
